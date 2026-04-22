@@ -38,7 +38,7 @@ jobs:
         run: dotnet build test/Soenneker.Together.HttpClients.Tests/Soenneker.Together.HttpClients.Tests.csproj --configuration Release --no-restore --verbosity minimal
 
       - name: Test
-        run: dotnet test test/Soenneker.Together.HttpClients.Tests/Soenneker.Together.HttpClients.Tests.csproj --configuration Release --no-build --no-restore --verbosity minimal
+        run: dotnet test --project test/Soenneker.Together.HttpClients.Tests/Soenneker.Together.HttpClients.Tests.csproj --configuration Release --no-build --no-restore --verbosity minimal
 
       - name: Pack
         run: dotnet pack src/Soenneker.Together.HttpClients/Soenneker.Together.HttpClients.csproj --configuration Release --no-build --no-restore --output . --verbosity minimal
