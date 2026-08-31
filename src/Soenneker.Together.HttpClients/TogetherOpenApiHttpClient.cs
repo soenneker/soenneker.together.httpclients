@@ -11,13 +11,13 @@ using Soenneker.Utils.HttpClientCache.Abstract;
 
 namespace Soenneker.Together.HttpClients;
 
-///<inheritdoc cref="ITogetherOpenApiHttpClient"/>
 public sealed class TogetherOpenApiHttpClient : ITogetherOpenApiHttpClient
 {
     private readonly IHttpClientCache _httpClientCache;
     private readonly IConfiguration _config;
+    private readonly string _cacheKey = $"{nameof(TogetherOpenApiHttpClient)}-{Guid.NewGuid():N}";
 
-    private const string _prodBaseUrl = "https://api.together.xyz/v1";
+    private const string _prodBaseUrl = "https://api.together.ai/v1/";
 
     public TogetherOpenApiHttpClient(IHttpClientCache httpClientCache, IConfiguration config)
     {
@@ -27,7 +27,7 @@ public sealed class TogetherOpenApiHttpClient : ITogetherOpenApiHttpClient
 
     public ValueTask<HttpClient> Get(CancellationToken cancellationToken = default)
     {
-        return _httpClientCache.Get(nameof(TogetherOpenApiHttpClient), (config: _config, baseUrl: _config["Together:ClientBaseUrl"] ?? _prodBaseUrl), static state =>
+        return _httpClientCache.Get(_cacheKey, (config: _config, baseUrl: _config["Together:ClientBaseUrl"] ?? _prodBaseUrl), static state =>
         {
             var apiKey = state.config.GetValueStrict<string>("Together:ApiKey");
             string authHeaderName = state.config["Together:AuthHeaderName"] ?? "Authorization";
@@ -50,7 +50,7 @@ public sealed class TogetherOpenApiHttpClient : ITogetherOpenApiHttpClient
     /// </summary>
     public void Dispose()
     {
-        _httpClientCache.RemoveSync(nameof(TogetherOpenApiHttpClient));
+        _httpClientCache.RemoveSync(_cacheKey);
     }
 
     /// <summary>
@@ -59,6 +59,6 @@ public sealed class TogetherOpenApiHttpClient : ITogetherOpenApiHttpClient
     /// <returns>A task that represents the asynchronous operation.</returns>
     public ValueTask DisposeAsync()
     {
-        return _httpClientCache.Remove(nameof(TogetherOpenApiHttpClient));
+        return _httpClientCache.Remove(_cacheKey);
     }
 }
