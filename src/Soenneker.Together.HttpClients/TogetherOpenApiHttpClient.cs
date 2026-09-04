@@ -11,6 +11,7 @@ using Soenneker.Utils.HttpClientCache.Abstract;
 
 namespace Soenneker.Together.HttpClients;
 
+/// <inheritdoc cref="ITogetherOpenApiHttpClient" />
 public sealed class TogetherOpenApiHttpClient : ITogetherOpenApiHttpClient
 {
     private readonly IHttpClientCache _httpClientCache;
