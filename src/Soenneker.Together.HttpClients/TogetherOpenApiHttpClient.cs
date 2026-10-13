@@ -30,7 +30,7 @@ public sealed class TogetherOpenApiHttpClient : ITogetherOpenApiHttpClient
     {
         return _httpClientCache.Get(_cacheKey, (config: _config, baseUrl: _config["Together:ClientBaseUrl"] ?? _prodBaseUrl), static state =>
         {
-            var apiKey = state.config.GetValueStrict<string>("Together:ApiKey");
+            var apiKey = state.config.GetStringStrict("Together:ApiKey");
             string authHeaderName = state.config["Together:AuthHeaderName"] ?? "Authorization";
             string authHeaderValueTemplate = state.config["Together:AuthHeaderValueTemplate"] ?? "Bearer {token}";
             string authHeaderValue = authHeaderValueTemplate.Replace("{token}", apiKey, StringComparison.Ordinal);
